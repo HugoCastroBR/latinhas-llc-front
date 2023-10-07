@@ -1,0 +1,36 @@
+.demandasHeader{
+    background-color: #dfdfdf;
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+}
+
+
+.demandaStatus1{
+  background-color: palevioletred;
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.demandaStatus2{
+  background-color: palegoldenrod;
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.demandaStatus3{
+    background-color: palegreen;
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+}

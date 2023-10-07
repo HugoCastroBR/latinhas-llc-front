@@ -17,21 +17,27 @@ import {
   GridRowEditStopReasons,
   GridCellParams,
 } from '@mui/x-data-grid';
+import useStore from "@/app/hooks/useStore";
+import { SetEditDialogOpen } from "@/app/store/actions";
 
 
 const initialRows: GridRowsProp = [
   {
     id: 1,
-    periodo: "2021-09-01",
+    dataInicio: "2021-09-01",
+    dataFim: "2021-09-02",
     SKUs: 1,
-    "Total Plan.(TONS)": 100,
-    "Total Prod.(TONS)": 100,
+    "totalPlan": 100,
+    "totalProd": 100,
     "status": "PLANEJAMENTO",
   },
 ];
 
 
 const DemandasTable = () => {
+
+  const { states, dispatch } = useStore();
+
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
@@ -42,7 +48,7 @@ const DemandasTable = () => {
   };
 
   const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    dispatch(SetEditDialogOpen(true))
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -55,6 +61,14 @@ const DemandasTable = () => {
     setRowModesModel(newRowModesModel);
   };
 
+  const genPeriod = () => {
+    rows.map((row) => {
+      row.periodo = row.dataInicio + ' - ' + row.dataFim
+    })
+  }
+
+  genPeriod()
+
   const columns: GridColDef[] = [
     {
       field: 'editar',
@@ -64,6 +78,7 @@ const DemandasTable = () => {
       align: 'center',
       headerClassName: 'demandasHeader',
       cellClassName: 'actions',
+      sortable: false,
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -80,49 +95,53 @@ const DemandasTable = () => {
     {
       field: 'periodo',
       headerName: 'PERÍODO',
-      width: 150,
+      flex: 1,
       type: 'string',
       headerClassName: 'demandasHeader',
       align: 'center',
       headerAlign: 'center',
+      sortable: false,
     },
     {
       field: 'SKUs',
       headerName: 'SKUs',
-      width: 150,
+      flex: 1,
       type: 'number',
       headerClassName: 'demandasHeader',
       align: 'center',
       headerAlign: 'center',
+      sortable: false,
     },
     {
-      field: 'Total Plan.(TONS)',
+      field: 'totalPlan',
       headerName: 'TOTAL PLAN.(TONS)',
-      width: 150,
+      flex: 1,
       type: 'number',
       headerClassName: 'demandasHeader',
       align: 'center',
       headerAlign: 'center',
+      sortable: false,
     },
     {
-      field: 'Total Prod.(TONS)',
+      field: 'totalProd',
       headerName: 'TOTAL PROD.(TONS)',
-      width: 150,
+      flex: 1,
       type: 'number',
       headerClassName: 'demandasHeader',
       align: 'center',
       headerAlign: 'center',
+      sortable: false,
     },
     {
       field: 'status',
       headerName: 'STATUS',
-      width: 150,
+      flex: 1,
       type : 'singleSelect',
       valueOptions: ['PLANEJAMENTO', 'EM ANDAMENTO', 'CONCLUÍDO'],
       headerClassName: 'demandasHeader',
       align: 'center',
       headerAlign: 'center',
-
+      sortable: false,
     }
   ];
 
@@ -141,6 +160,12 @@ const DemandasTable = () => {
 
         }}
         editMode="row"
+        disableColumnFilter
+        disableColumnMenu
+        disableColumnSelector
+        disableDensitySelector
+        disableEval
+        disableRowSelectionOnClick
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}

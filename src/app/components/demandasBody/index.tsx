@@ -1,45 +1,29 @@
+
+'use client'
+
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import DemandasTable from "../demandasTable";
+import useStore from "@/app/hooks/useStore";
+import { SetNewDialogOpen } from "@/app/store/actions";
+import AddButton from "../addButton";
 
 const DemandasBody = () => {
+
+  const { states, dispatch } = useStore();
+
+  const handleClickOpen = () => {
+    console.log('click')
+    dispatch(SetNewDialogOpen(true))
+  }
+
   return (
-    <Box>
-      <Box
-      >
+    <Box width={'80%'}>
+      <Box>
         <Typography variant="h5" color="black" fontWeight="bold" align="left">
           {'DEMANDAS DE PRODUÇÃO DE LATINHAS'}
         </Typography>
-        <Button
-          sx={{
-            marginTop: '10px',
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            bgcolor: 'darkorange',
-            color: 'white',
-            width: '120px',
-            height: '40px',
-          }}
-        >
-          <Typography variant="body2"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '20px',
-            }}
-          >
-            +
-          </Typography>
-          <Typography
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '12px',
-              marginTop: '2px',
-            }}
-          >
-            Adicionar
-          </Typography>
-        </Button>
+        <AddButton onClick={handleClickOpen} />
       </Box>
       <DemandasTable />
     </Box>

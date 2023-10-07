@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
 import React from "react";
 import DemandasBody from "../demandasBody";
+import EditDialog from "../editarDialog";
+import NewDemanda from "../newDemandaDialog";
+import NewLatinha from "../newLatinhaDialog";
 
 const Body = () => {
   return (
@@ -14,6 +17,9 @@ const Body = () => {
         paddingTop: '40px',
       }}
     >
+      <NewLatinha />
+      <EditDialog />
+      <NewDemanda />
       <DemandasBody />
     </Box>
   )

@@ -4,6 +4,7 @@ import "./styles.css"
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -17,21 +18,24 @@ import {
   GridRowEditStopReasons,
   GridCellParams,
 } from '@mui/x-data-grid';
+import useStore from "@/app/hooks/useStore";
+import { SetEditDialogOpen } from "@/app/store/actions";
 
 
 const initialRows: GridRowsProp = [
   {
     id: 1,
-    periodo: "2021-09-01",
-    SKUs: 1,
-    "Total Plan.(TONS)": 100,
-    "Total Prod.(TONS)": 100,
-    "status": "PLANEJAMENTO",
+    Sku: 1,
+    "TotalPlan": 100,
+    "descricao": "PLANEJAMENTO",
   },
 ];
 
 
-export default function FullFeaturedCrudGrid() {
+const LatinhasTable = () => {
+
+  const { states, dispatch } = useStore();
+
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
@@ -41,8 +45,8 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleRemoveClick = (id: GridRowId) => () => {
+    dispatch(SetEditDialogOpen(true))
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -56,74 +60,61 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns: GridColDef[] = [
+
     {
-      field: 'editar',
+      field: 'Sku',
+      headerName: 'SKU',
+      flex: 1,
+      type: 'number',
+      headerClassName: 'demandasHeader',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+    },
+    {
+      field: 'descricao',
+      headerName: 'DESCRIÇÃO',
+      flex: 1,
+      type: 'string',
+      headerClassName: 'demandasHeader',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+    },
+    {
+      field: 'TotalPlan',
+      headerName: 'TOTAL PLAN.(TONS)',
+      flex: 1,
+      type: 'number',
+      headerClassName: 'demandasHeader',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+    },
+    {
+      field: 'remove',
       type: 'actions',
-      headerName: 'EDITAR',
+      headerName: 'Remover',
       width: 100,
       align: 'center',
       headerClassName: 'demandasHeader',
       cellClassName: 'actions',
+      sortable: false,
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
             key={id}
-            icon={<EditIcon />}
+            icon={<DeleteIcon
+              color="warning"
+            />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleRemoveClick(id)}
             color="inherit"
           />,
         ];
       },
     },
-    {
-      field: 'periodo',
-      headerName: 'PERÍODO',
-      width: 150,
-      type: 'string',
-      headerClassName: 'demandasHeader',
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'SKUs',
-      headerName: 'SKUs',
-      width: 150,
-      type: 'number',
-      headerClassName: 'demandasHeader',
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'Total Plan.(TONS)',
-      headerName: 'TOTAL PLAN.(TONS)',
-      width: 150,
-      type: 'number',
-      headerClassName: 'demandasHeader',
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'Total Prod.(TONS)',
-      headerName: 'TOTAL PROD.(TONS)',
-      width: 150,
-      type: 'number',
-      headerClassName: 'demandasHeader',
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'status',
-      headerName: 'STATUS',
-      width: 150,
-      type : 'singleSelect',
-      valueOptions: ['PLANEJAMENTO', 'EM ANDAMENTO', 'CONCLUÍDO'],
-      headerClassName: 'demandasHeader',
-      align: 'center',
-      headerAlign: 'center',
-
-    }
   ];
 
   return (
@@ -141,6 +132,12 @@ export default function FullFeaturedCrudGrid() {
 
         }}
         editMode="row"
+        disableColumnFilter
+        disableColumnMenu
+        disableColumnSelector
+        disableDensitySelector
+        disableEval
+        disableRowSelectionOnClick
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
@@ -150,13 +147,13 @@ export default function FullFeaturedCrudGrid() {
         }}
         getCellClassName={(params: GridCellParams<any, any, number>) => {
           if (params.field === 'status') {
-            if(params.value === 'PLANEJAMENTO'){
+            if (params.value === 'PLANEJAMENTO') {
               return 'demandaStatus1'
             }
-            if(params.value === 'EM ANDAMENTO'){
+            if (params.value === 'EM ANDAMENTO') {
               return 'demandaStatus2'
             }
-            if(params.value === 'CONCLUÍDO'){
+            if (params.value === 'CONCLUÍDO') {
               return 'demandaStatus3'
             }
             return ''
@@ -167,3 +164,5 @@ export default function FullFeaturedCrudGrid() {
     </Box>
   );
 }
+
+export default LatinhasTable;
