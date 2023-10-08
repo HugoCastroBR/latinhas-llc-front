@@ -8,6 +8,7 @@ interface initialStateProps {
 	demandas: demandaGetProps[];
 	editDialogOpen: boolean;
 	newDialogOpen: boolean;
+	maxProd: number;
 }
 
 const initialState:initialStateProps = {
@@ -47,6 +48,7 @@ const initialState:initialStateProps = {
 	],
 	editDialogOpen: false,
 	newDialogOpen: false,
+	maxProd: 0,
 }
 
 export const DemandasSlice = createSlice({
@@ -64,6 +66,9 @@ export const DemandasSlice = createSlice({
 		},
 		SET_EDITING_DEMANDA(state, { payload }: { payload: Demanda }) {
 			state.editingDemanda = payload;
+		},
+		SET_MAX_PROD(state, { payload }: { payload: number }) {
+			state.maxProd = payload;
 		}
 	},
 });

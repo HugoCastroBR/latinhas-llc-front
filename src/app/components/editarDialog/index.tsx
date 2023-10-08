@@ -10,15 +10,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
 import useStore from '@/app/hooks/useStore';
-import { SetEditDialogOpen, SetLatinhasAddOpen } from '@/app/store/actions';
+import { SetEditDialogOpen, SetLatinhasAddOpen, SetMaxProd } from '@/app/store/actions';
 import { Alert, Box, Input, InputLabel, Typography, withStyles } from '@mui/material';
 import AddButton from '../addButton';
 import { Demanda } from '@/app/types/demandas';
 import calcWeek from './../../utils/calcSemana';
 import convertDatesToPeriod from '@/app/utils/convertDatesToPeriod';
-import LatinhasTable from '../LatinhasTable';
-import { type } from './../../../../.next/server/vendor-chunks/react-draggable';
 import { updateTotalProd } from '@/app/api';
+import LatinhasTable from '@/app/components/latinhasTable';
 
 
 function PaperComponent(props: PaperProps) {
@@ -42,7 +41,6 @@ const EditDialog = () => {
   const [currentDemanda, setCurrentDemanda] = React.useState<Demanda>(states.Demandas.editingDemanda)
   const [periodo, setPeriodo] = React.useState<string>('')
   const [totalProd, setTotalProd] = React.useState<number>(currentDemanda.totalProd)
-
 
 
 
@@ -211,7 +209,7 @@ const EditDialog = () => {
             }}
           >
             <InputLabel>
-              Total Prod.(Tons) - max({currentDemanda.totalPlan})
+              Total Prod.(Tons)
             </InputLabel>
             <Input
               type="number"

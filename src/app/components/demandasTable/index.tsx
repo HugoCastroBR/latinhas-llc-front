@@ -38,7 +38,7 @@ const DemandasTable = () => {
   const [initialRows, setInitialRows] = React.useState(states.Demandas.demandas)
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({})
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [totalPages, setTotalPages] = React.useState(0);
   const [totalItems, setTotalItems] = React.useState(0);
@@ -210,14 +210,14 @@ const DemandasTable = () => {
         editMode="row"
         onPaginationModelChange={
           (params) => {
-            console.log(params)
+            
             setPage(params.page + 1)
             setItemsPerPage(params.pageSize)
           }
         }
         initialState={{
           pagination: { paginationModel: { 
-            page: 1,
+            page: 0,
             pageSize: 10
         }},
         }}

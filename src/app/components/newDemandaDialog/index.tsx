@@ -108,8 +108,8 @@ const NewDemanda = () => {
   
 
   const onSubmit = (data: demandaInputProps) => {
-    console.log('data')
-    console.log(data)
+    
+    
     if(isValid){
       handleSave(data)
     }

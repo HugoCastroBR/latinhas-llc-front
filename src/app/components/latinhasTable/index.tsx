@@ -19,7 +19,7 @@ import {
   GridCellParams,
 } from '@mui/x-data-grid';
 import useStore from "@/app/hooks/useStore";
-import { SetEditDialogOpen, SetLatinhas } from "@/app/store/actions";
+import { SetEditDialogOpen, SetLatinhas, SetMaxProd } from "@/app/store/actions";
 import { getLatinhas, removeLatinha } from "@/app/api";
 
 
@@ -61,6 +61,7 @@ const LatinhasTable = () => {
         setTotalPages(latinhasData?.totalPages || 1)
         setTotalItems(latinhasData?.total || 0)
       }
+    
     } catch (error) {
       console.error("Erro ao buscar latinhas",error)
     }

@@ -19,6 +19,10 @@ export const SetEdidingDemanda = (value: Demanda) => {
   return DemandasActions.SET_EDITING_DEMANDA(value)
 }
 
+export const SetMaxProd = (value: number) => {
+  return DemandasActions.SET_MAX_PROD(value)
+}
+
 export const SetLatinhas = (value: latinhaGetProps[]) => {
   return LatinhasActions.SET_LATINHAS(value)
 }
@@ -26,3 +30,4 @@ export const SetLatinhas = (value: latinhaGetProps[]) => {
 export const SetLatinhasAddOpen = (value: boolean) => {
   return LatinhasActions.SET_NEW_DIALOG_OPEN(value)
 }
+

@@ -38,125 +38,89 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" 
+    <AppBar position="static"
       sx={{
         backgroundColor: 'ThreeDDarkShadow',
       }}
     >
       <Container maxWidth="xl">
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          borderBottom: '1px solid #3d3d3d',
-        }}
-      >
-        <Typography variant="body2" color="darkorange" align="center">
-          {'© SMI - Engenharia '}
-          {new Date().getFullYear()}
-          {'.'}
-        </Typography>
-      </Box>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            borderBottom: '1px solid #3d3d3d',
+          }}
+        >
+          <Typography variant="body2" color="darkorange" align="center">
+            {'© SMI - Engenharia '}
+            {new Date().getFullYear()}
+            {'.'}
+          </Typography>
+        </Box>
       </Container>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              ml: 4,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+        <Toolbar disableGutters
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNavMenu}
+            color="inherit"
           >
-            SMI - Engenharia
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="a"
-                  href="#app-bar-with-responsive-menu"
-                  bgcolor={'darkorange'}
-                  sx={{
-                    mr: 2,
-                    ml: 4,
-                    display: { xs: 'flex', md: 'none' },
-                    flexGrow: 1,
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.1rem',
-                    color: 'white',
-                    textDecoration: 'none',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  LM
-                </Typography>
-              </IconButton>
-            </Tooltip>
+            <MenuIcon />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                marginLeft: 2,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              SMI - Engenharia
+            </Typography>
+          </IconButton>
+
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'darkorange',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+          }}>
+            {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+
+              sx={{
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.1rem',
+                color: 'white',
+                textDecoration: 'none',
+
+              }}
+            >
+              LM
+            </Typography>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

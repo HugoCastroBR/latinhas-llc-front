@@ -102,7 +102,7 @@ export const removeLatinha = async (demandaId: number, latinhaId: number) => {
     });
 
     if (response.ok) {
-      console.log(`Linha com ID ${latinhaId} removida com sucesso.`);
+      ;
     } else {
       throw new Error(`Erro ao remover latinha: ${response.statusText}`);
     }
@@ -126,7 +126,7 @@ export const updateTotalProd = async (demandaId: number, novoTotalProd: number) 
     const response = await fetch(endpoint, requestBody);
 
     if (response.ok) {
-      console.log('TotalProd atualizado com sucesso.');
+      ;
     } else {
       console.error('Erro ao atualizar TotalProd:', response.statusText);
     }

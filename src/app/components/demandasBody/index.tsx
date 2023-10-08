@@ -13,7 +13,7 @@ const DemandasBody = () => {
   const { states, dispatch } = useStore();
 
   const handleClickOpen = () => {
-    console.log('click')
+    
     dispatch(SetNewDialogOpen(true))
   }
 
