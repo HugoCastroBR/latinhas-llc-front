@@ -19,25 +19,64 @@ import {
   GridCellParams,
 } from '@mui/x-data-grid';
 import useStore from "@/app/hooks/useStore";
-import { SetEditDialogOpen } from "@/app/store/actions";
+import { SetEditDialogOpen, SetLatinhas } from "@/app/store/actions";
+import { getLatinhas, removeLatinha } from "@/app/api";
 
 
-const initialRows: GridRowsProp = [
-  {
-    id: 1,
-    Sku: 1,
-    "TotalPlan": 100,
-    "descricao": "PLANEJAMENTO",
-  },
-];
+
 
 
 const LatinhasTable = () => {
 
   const { states, dispatch } = useStore();
 
-  const [rows, setRows] = React.useState(initialRows);
+
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [initialRows, setInitialRows] = React.useState(states.Latinhas.latinhas)
+  const [rows, setRows] = React.useState(initialRows);
+  const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [totalItems, setTotalItems] = React.useState(0);
+
+
+  const [EditingDemandId, setEditingDemandId] = React.useState<number>(0)
+
+  React.useEffect(() => {
+    setEditingDemandId(states.Demandas.editingDemanda.id)
+  }, [states.Demandas.editingDemanda])
+
+  const getLatinhasFromApi = async () => {
+    try {
+      if(page == 0){
+        const latinhasData = await getLatinhas(EditingDemandId,1, itemsPerPage);
+        setRows(latinhasData?.latinhas || [])
+        dispatch(SetLatinhas(latinhasData?.latinhas || []))
+        setTotalPages(latinhasData?.totalPages || 1)
+        setTotalItems(latinhasData?.total || 0)
+      }else{
+        const latinhasData = await getLatinhas(EditingDemandId,page, itemsPerPage);
+        setRows(latinhasData?.latinhas || [])
+        dispatch(SetLatinhas(latinhasData?.latinhas || []))
+        setTotalPages(latinhasData?.totalPages || 1)
+        setTotalItems(latinhasData?.total || 0)
+      }
+    } catch (error) {
+      console.error("Erro ao buscar latinhas",error)
+    }
+  }
+
+  React.useEffect(() => {
+    getLatinhasFromApi()
+  }, [EditingDemandId])
+
+  React.useEffect(() => {
+    getLatinhasFromApi()
+  }, [page, itemsPerPage])
+
+  React.useEffect(() => {
+    getLatinhasFromApi()
+  }, [])
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -45,19 +84,29 @@ const LatinhasTable = () => {
     }
   };
 
+  const removeLatinhaFromApi = async(
+    demandId:number,
+    id:number,
+  ) => {
+    await removeLatinha(demandId,id);
+    await getLatinhasFromApi()
+  }
+
   const handleRemoveClick = (id: GridRowId) => () => {
-    dispatch(SetEditDialogOpen(true))
+    removeLatinhaFromApi(states.Demandas.editingDemanda.id,Number(id))
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
+
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
+  
+
+  React.useEffect(() => {
+    getLatinhasFromApi()
+  }, [states.Latinhas.newDialogOpen])
 
   const columns: GridColDef[] = [
 
@@ -128,10 +177,26 @@ const LatinhasTable = () => {
       <DataGrid
         rows={rows}
         columns={columns}
-        sx={{
-
-        }}
         editMode="row"
+        onPaginationModelChange={
+          (params) => {
+            setPage(params.page)
+            setItemsPerPage(params.pageSize)
+          }
+        }
+        initialState={{
+          pagination: { paginationModel: { 
+            page: 1,
+            pageSize: 10
+        }},
+        }}
+        pageSizeOptions={[10, 25]}
+        rowCount={totalItems}
+        sx={{
+          minHeight: '400px',
+          maxHeight: '1200px',
+          width: '100%',
+        }}
         disableColumnFilter
         disableColumnMenu
         disableColumnSelector
@@ -141,7 +206,6 @@ const LatinhasTable = () => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}

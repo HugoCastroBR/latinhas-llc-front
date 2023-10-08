@@ -18,28 +18,72 @@ import {
   GridCellParams,
 } from '@mui/x-data-grid';
 import useStore from "@/app/hooks/useStore";
-import { SetEditDialogOpen } from "@/app/store/actions";
+import { SetDemandas, SetEdidingDemanda, SetEditDialogOpen } from "@/app/store/actions";
+import { getDemandas, getOneDemanda } from "@/app/api";
+import { Demanda, demandaGetProps, demandasGetAllProps } from '@/app/types/demandas'
 
 
-const initialRows: GridRowsProp = [
-  {
-    id: 1,
-    dataInicio: "2021-09-01",
-    dataFim: "2021-09-02",
-    SKUs: 1,
-    "totalPlan": 100,
-    "totalProd": 100,
-    "status": "PLANEJAMENTO",
-  },
-];
+
 
 
 const DemandasTable = () => {
 
+
+
+
+
   const { states, dispatch } = useStore();
 
+
+  const [initialRows, setInitialRows] = React.useState(states.Demandas.demandas)
   const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({})
+  const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [totalItems, setTotalItems] = React.useState(0);
+  const getDemandasFromApi = async () => {
+    try {
+      if(page == 0){
+        const demandasData = await getDemandas(1, itemsPerPage);
+        setRows(demandasData?.demandas || [])
+        dispatch(SetDemandas(demandasData?.demandas || []))
+        setTotalPages(demandasData?.totalPages || 1)
+        setTotalItems(demandasData?.total || 0)
+      }else{
+        const demandasData = await getDemandas(page, itemsPerPage);
+        setRows(demandasData?.demandas || [])
+        dispatch(SetDemandas(demandasData?.demandas || []))
+        setTotalPages(demandasData?.totalPages || 1)
+        setTotalItems(demandasData?.total || 0)
+      }
+    } 
+    catch (error) {
+      console.error('Erro ao buscar demandas:', error);
+    }
+  }
+
+  React.useEffect(() => {
+    getDemandasFromApi()
+  }, [])
+
+  React.useEffect(() => {
+    if(page <= 1){
+      setPage(1)
+      getDemandasFromApi()
+    }
+    getDemandasFromApi()
+  }, [page, itemsPerPage])
+
+  React.useEffect(() => {
+    getDemandasFromApi()
+  }, 
+  [
+  states.Demandas.newDialogOpen,
+  states.Demandas.editDialogOpen,
+  ])
+  
+
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -47,27 +91,33 @@ const DemandasTable = () => {
     }
   };
 
-  const handleEditClick = (id: GridRowId) => () => {
-    dispatch(SetEditDialogOpen(true))
+  const getOneDemandasFromApi = async (id: number) => {
+    try {
+      const demandaData = await getOneDemanda(id);
+      dispatch(SetEdidingDemanda(demandaData))
+      dispatch(SetEditDialogOpen(true))
+    } 
+    catch (error) {
+      console.error('Erro ao buscar demanda:', error);
+    }
+  }
+
+  const handleEditClick = (id: number) => () => {
+    getOneDemandasFromApi(id)
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
-  const genPeriod = () => {
-    rows.map((row) => {
-      row.periodo = row.dataInicio + ' - ' + row.dataFim
-    })
-  }
+  // const genPeriod = () => {
+  //   rows.map((row) => {
+  //     row.periodo = row.dataInicio + ' - ' + row.dataFim
+  //   })
+  // }
 
-  genPeriod()
+  // genPeriod()
 
   const columns: GridColDef[] = [
     {
@@ -86,7 +136,7 @@ const DemandasTable = () => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(Number(id))}
             color="inherit"
           />,
         ];
@@ -147,7 +197,8 @@ const DemandasTable = () => {
 
   return (
     <Box sx={{
-      height: 400,
+      minHeight: '400px',
+      maxHeight: '1200px',
       width: '100%',
       backgroundColor: 'white',
       marginTop: '20px',
@@ -156,10 +207,27 @@ const DemandasTable = () => {
       <DataGrid
         rows={rows}
         columns={columns}
-        sx={{
-
-        }}
         editMode="row"
+        onPaginationModelChange={
+          (params) => {
+            console.log(params)
+            setPage(params.page + 1)
+            setItemsPerPage(params.pageSize)
+          }
+        }
+        initialState={{
+          pagination: { paginationModel: { 
+            page: 1,
+            pageSize: 10
+        }},
+        }}
+        pageSizeOptions={[10, 25]}
+        rowCount={totalItems}
+        sx={{
+          minHeight: '400px',
+          maxHeight: '1200px',
+          width: '100%',
+        }}
         disableColumnFilter
         disableColumnMenu
         disableColumnSelector
@@ -169,7 +237,6 @@ const DemandasTable = () => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}

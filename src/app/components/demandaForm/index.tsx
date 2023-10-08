@@ -6,7 +6,7 @@ import { FieldValues, UseFormRegister, useForm } from 'react-hook-form';
 import './styles.css'
 
 interface DemandaFormProps {
-  register: UseFormRegister<{ dataFim: Date; totalPlan: number; totalProd: number; DataInicio: Date; }>;
+  register: UseFormRegister<{ dataFim: Date; totalPlan: number; totalProd: number; dataInicio: Date; }>;
 }
 
 const DemandaForm = ({register}:DemandaFormProps) => {
@@ -16,15 +16,15 @@ const DemandaForm = ({register}:DemandaFormProps) => {
   return (
     <Box>
       
-        <FormLabel htmlFor="DataInicio">
+        <FormLabel htmlFor="dataInicio">
           Data Inicial:
         </FormLabel>
         <input
-          id="DataInicio"
+          id="dataInicio"
           className="inputText"
           placeholder="Data Inicial"
           type="date"
-          {...register('DataInicio')}
+          {...register('dataInicio')}
         />
         <FormLabel htmlFor="dataFim">
           Data Final:

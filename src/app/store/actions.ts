@@ -1,9 +1,9 @@
 
-import { Demanda } from '../types/demandas';
-import { latinha } from '../types/latinhas';
+import { Demanda, demandaGetProps } from '../types/demandas';
+import { latinha, latinhaGetProps } from '../types/latinhas';
 import { AppActions, DemandasActions, LatinhasActions} from './index';
 
-export const SetDemandas = (value: Demanda[]) => {
+export const SetDemandas = (value: demandaGetProps[]) => {
   return DemandasActions.SET_DEMANDAS(value)
 }
 
@@ -15,7 +15,11 @@ export const SetNewDialogOpen = (value: boolean) => {
   return DemandasActions.SET_NEW_DIALOG_OPEN(value)
 }
 
-export const SetLatinhas = (value: latinha[]) => {
+export const SetEdidingDemanda = (value: Demanda) => {
+  return DemandasActions.SET_EDITING_DEMANDA(value)
+}
+
+export const SetLatinhas = (value: latinhaGetProps[]) => {
   return LatinhasActions.SET_LATINHAS(value)
 }
 

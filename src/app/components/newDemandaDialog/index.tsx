@@ -16,6 +16,8 @@ import DemandaForm from '../demandaForm';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { demandaOutputProps } from '@/app/types/demandas';
+import { createDemanda } from '@/app/api';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -31,19 +33,27 @@ function PaperComponent(props: PaperProps) {
 }
 
 const schema = Yup.object().shape({
-  DataInicio: Yup.date().required("Campo Obrigatorio"),
-  dataFim: Yup.date().required("Campo Obrigatorio"),
-  totalPlan: Yup.number().min(1,"O Total Planejado deve ser maior que 0")
-  .required("Campo Obrigatorio"),
-  totalProd: Yup.number().min(0,"O Total Produzido deve ser maior ou igual a 0")
-  .required("Campo Obrigatorio"),
-})
+  dataInicio: Yup.date().required('Campo Obrigatório'),
+  dataFim: Yup.date().required('Campo Obrigatório'),
+  totalPlan: Yup.number()
+    .min(1, 'O Total Planejado deve ser maior que 0')
+    .required('Campo Obrigatório'),
+  totalProd: Yup.number()
+    .required('Campo Obrigatório')
+    .test('is-totalProd-valid', 'O Total Produzido deve ser menor ou igual ao Total Planejado', function (value) {
+      const totalPlan = this.parent.totalPlan; 
+      if (totalPlan != null && value != null && totalPlan < value) {
+        return false; 
+      }
+      return true; 
+    }),
+});
 
 
 const NewDemanda = () => {
 
   const { states, dispatch } = useStore();
-
+  
 
   React.useEffect(() => {
     setOpen(states.Demandas.newDialogOpen)
@@ -61,7 +71,7 @@ const NewDemanda = () => {
 
 
   interface demandaInputProps {
-    DataInicio: Date;
+    dataInicio: Date;
     dataFim: Date;
     totalPlan: number;
     totalProd: number;
@@ -75,9 +85,23 @@ const NewDemanda = () => {
   })
 
   const handleSave = (data:demandaInputProps) => {
-    console.log("Salvar")
+    const genStatus = (data:demandaInputProps) => {
+      if(data.totalProd < 0){
+        return 'EM ANDAMENTO'
+      }
+      if(data.totalProd == data.totalPlan){
+        return 'CONCLUÍDO'
+      }
+      return 'PLANEJAMENTO'
+    }
+
+    const newItem:demandaOutputProps = {
+      ...data,
+      status: genStatus(data),
+    }
+    createDemanda(newItem)
+    dispatch(SetNewDialogOpen(false))
     reset()
-    // dispatch(SetNewDialogOpen(false))
   }
 
   const { errors, isSubmitting,isValid } = formState
@@ -90,18 +114,18 @@ const NewDemanda = () => {
       handleSave(data)
     }
   }
-  
+
 
   const handlerErrorMsg = (field:string) => {
     switch (field) {
-      case 'DataInicio':
+      case 'dataInicio':
         return 'Data Inicial é Obrigatorio'
       case 'dataFim':
         return 'Data Final é Obrigatorio'
       case 'totalPlan':
         return 'Total Planejado é Obrigatorio e deve ter valor maior que 0'
       case 'totalProd':
-        return 'Total Produzido é Obrigatorio e deve ter valor maior ou igual a 0'
+        return 'Total Produzido é Obrigatorio e deve ter valor menor ou igual ao planejado'
       default:
         return ''
     }
