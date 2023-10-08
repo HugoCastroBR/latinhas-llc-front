@@ -9,3 +9,11 @@ export type Demanda = {
   status: string;
   latinhas?: latinha[];
 }
+
+export type demandaOutputProps = {
+  dataInicio: Date;
+  dataFim: Date;
+  totalPlan: number;
+  totalProd: number;
+  status: string;
+}

@@ -12,7 +12,11 @@ import Draggable from 'react-draggable';
 import useStore from '@/app/hooks/useStore';
 import { SetLatinhasAddOpen, SetNewDialogOpen } from '@/app/store/actions';
 import { Typography, withStyles } from '@mui/material';
-
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import LatinhaForm from '../latinhaForm';
+import { Alert } from '@mui/material';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -26,6 +30,17 @@ function PaperComponent(props: PaperProps) {
     </Draggable>
   );
 }
+
+
+const schema = Yup.object().shape({
+  Sku: Yup.number().min(0,"O Sku deve ser mair ou igual a 0").required("Campo Obrigatorio"),
+  descricao: Yup.string().required("Campo Obrigatorio"),
+  TotalPlan: Yup.number().min(1,"O Total Planejado deve ser maior que 0")
+  .required("Campo Obrigatorio"),
+})
+
+
+
 
 
 const NewLatinha = () => {
@@ -45,8 +60,51 @@ const NewLatinha = () => {
     dispatch(SetLatinhasAddOpen(false))
   };
 
-  const handleSave = () => {
-    dispatch(SetLatinhasAddOpen(false))
+
+  interface latinhaInputProps {
+    Sku: number;
+    descricao: string;
+    TotalPlan: number;
+  }
+
+
+
+  const { register, handleSubmit,formState,reset } = useForm({
+    mode: 'all',
+    resolver: yupResolver(schema),
+  })
+
+  const handleSave = (data:latinhaInputProps) => {
+    console.log("Salvar")
+    reset()
+    // dispatch(SetNewDialogOpen(false))
+  }
+  
+
+  
+  const { errors, isSubmitting,isValid } = formState
+  
+  
+  const onSubmit = (data: latinhaInputProps) => {
+    console.log('data')
+    console.log(data)
+    if(isValid){
+      handleSave(data)
+    }
+  }
+  
+  
+  const handlerErrorMsg = (field:string) => {
+    switch (field) {
+      case 'totalPlan':
+        return 'Total Planejado é Obrigatorio e deve ter valor maior que 0'
+      case 'descricao':
+        return 'Descrição é Obrigatorio'
+      case 'Sku':
+        return 'Sku é Obrigatorio e deve ter valor maior ou igual a 0'
+      default:
+        return ''
+    }
   }
 
 
@@ -69,6 +127,11 @@ const NewLatinha = () => {
         }}
         
       >
+        {Object.keys(errors).length > 0 && (
+        <Alert severity="error" sx={{ width: '100%' }}>
+          {handlerErrorMsg(Object.keys(errors)[0])}
+        </Alert>
+      )}
         <DialogTitle 
           style={{ cursor: 'move' }}
           id="draggable-dialog-title"
@@ -103,7 +166,9 @@ const NewLatinha = () => {
           </Button>
         </DialogTitle>
         <DialogContent>
-          AQUI VAI O FORMULARIO !!
+          <LatinhaForm
+            register={register}
+          />
         </DialogContent>
         <DialogActions>
           <Button 
@@ -121,10 +186,12 @@ const NewLatinha = () => {
           >
             Cancelar
           </Button>
-          <Button 
-          onClick={handleSave}
+          {!isValid
+          ? 
+          <Button
+          onClick={handleSubmit(onSubmit)}
           sx={{
-            backgroundColor: 'green',
+            backgroundColor: 'gray',
             color: 'white',
             display: 'flex',
             justifyContent: 'center',
@@ -133,9 +200,26 @@ const NewLatinha = () => {
             width: '120px',
             margin: '5px'
           }}
-          >
-            Salvar
+        >
+          Salvar
+          </Button>
+          :
+          <Button
+              onClick={handleSubmit(onSubmit)}
+              sx={{
+                backgroundColor: 'green',
+                color: 'white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontWeight: 'bold',
+                width: '120px',
+                margin: '5px'
+              }}
+            >
+              Salvar
             </Button>
+        }
         </DialogActions>
       </Dialog>
   );

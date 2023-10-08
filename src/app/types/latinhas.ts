@@ -7,3 +7,10 @@ export type latinha = {
   TotalPlan: number;
   demanda: Demanda;
 }
+
+export type latinhaOutputProps = {
+  Sku: number;
+  descricao: string;
+  TotalPlan: number;
+  demandaId: 0;
+}
