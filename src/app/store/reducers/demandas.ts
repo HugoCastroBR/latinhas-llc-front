@@ -1,6 +1,6 @@
 
-import { Demanda, demandaGetProps } from "@/app/types/demandas";
-import parsePeriodToDates from "@/app/utils/convertPeriodToDate";
+import { Demanda, demandaGetProps } from "../../types/demandas";
+import parsePeriodToDates from "../../utils/convertPeriodToDate";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface initialStateProps {

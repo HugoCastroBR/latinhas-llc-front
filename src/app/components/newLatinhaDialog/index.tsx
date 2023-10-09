@@ -9,15 +9,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
-import useStore from '@/app/hooks/useStore';
-import { SetLatinhasAddOpen, SetNewDialogOpen } from '@/app/store/actions';
+import useStore from '../../hooks/useStore';
+import { SetLatinhasAddOpen, SetNewDialogOpen } from '../../store/actions';
 import { Typography, withStyles } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LatinhaForm from '../latinhaForm';
 import { Alert } from '@mui/material';
-import { createLatinha } from '@/app/api';
+import { createLatinha } from '../../api';
 
 function PaperComponent(props: PaperProps) {
   return (

@@ -4,8 +4,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import DemandasTable from "../demandasTable";
-import useStore from "@/app/hooks/useStore";
-import { SetNewDialogOpen } from "@/app/store/actions";
+import useStore from "../../hooks/useStore";
+import { SetNewDialogOpen } from "../../store/actions";
 import AddButton from "../addButton";
 
 const DemandasBody = () => {

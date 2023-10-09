@@ -1,5 +1,5 @@
 
-import { latinha, latinhaGetProps } from "@/app/types/latinhas";
+import { latinha, latinhaGetProps } from "../../types/latinhas";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const LatinhasSlice = createSlice({

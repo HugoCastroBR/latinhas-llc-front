@@ -9,15 +9,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
-import useStore from '@/app/hooks/useStore';
-import { SetNewDialogOpen } from '@/app/store/actions';
+import useStore from '../../hooks/useStore';
+import { SetNewDialogOpen } from '../../store/actions';
 import { Alert, Typography, withStyles } from '@mui/material';
 import DemandaForm from '../demandaForm';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { demandaOutputProps } from '@/app/types/demandas';
-import { createDemanda } from '@/app/api';
+import { demandaOutputProps } from '../../types/demandas';
+import { createDemanda } from '../../api';
 
 function PaperComponent(props: PaperProps) {
   return (

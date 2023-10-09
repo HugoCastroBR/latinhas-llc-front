@@ -1,5 +1,4 @@
-import { latinha, latinhaGetProps } from '@/app/types/latinhas';
-import { type } from 'os';
+import { latinhaGetProps } from './latinhas';
 
 export type Demanda = {
   id: number;

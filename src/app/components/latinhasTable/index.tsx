@@ -18,9 +18,9 @@ import {
   GridRowEditStopReasons,
   GridCellParams,
 } from '@mui/x-data-grid';
-import useStore from "@/app/hooks/useStore";
-import { SetEditDialogOpen, SetLatinhas, SetMaxProd } from "@/app/store/actions";
-import { getLatinhas, removeLatinha } from "@/app/api";
+import useStore from "../../hooks/useStore";
+import { SetEditDialogOpen, SetLatinhas, SetMaxProd } from "../../store/actions";
+import { getLatinhas, removeLatinha } from "../../api";
 
 
 

@@ -9,15 +9,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
-import useStore from '@/app/hooks/useStore';
-import { SetEditDialogOpen, SetLatinhasAddOpen, SetMaxProd } from '@/app/store/actions';
+import useStore from '../../hooks/useStore';
+import { SetEditDialogOpen, SetLatinhasAddOpen, SetMaxProd } from '../../store/actions';
 import { Alert, Box, Input, InputLabel, Typography, withStyles } from '@mui/material';
 import AddButton from '../addButton';
-import { Demanda } from '@/app/types/demandas';
+import { Demanda } from '../../types/demandas';
 import calcWeek from './../../utils/calcSemana';
-import convertDatesToPeriod from '@/app/utils/convertDatesToPeriod';
-import { updateTotalProd } from '@/app/api';
-import LatinhasTable from '@/app/components/latinhasTable';
+import convertDatesToPeriod from '../../utils/convertDatesToPeriod';
+import { updateTotalProd } from '../../api';
+import LatinhasTable from '../../components/latinhasTable';
 
 
 function PaperComponent(props: PaperProps) {

@@ -12,15 +12,13 @@ import {
   GridColDef,
   GridActionsCellItem,
   GridEventListener,
-  GridRowId,
-  GridRowModel,
+
   GridRowEditStopReasons,
   GridCellParams,
 } from '@mui/x-data-grid';
-import useStore from "@/app/hooks/useStore";
-import { SetDemandas, SetEdidingDemanda, SetEditDialogOpen } from "@/app/store/actions";
-import { getDemandas, getOneDemanda } from "@/app/api";
-import { Demanda, demandaGetProps, demandasGetAllProps } from '@/app/types/demandas'
+import useStore from "../../hooks/useStore";
+import { SetDemandas, SetEdidingDemanda, SetEditDialogOpen } from "../../store/actions";
+import { getDemandas, getOneDemanda } from "../../api/index";
 
 
 
